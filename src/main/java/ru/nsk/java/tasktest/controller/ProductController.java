@@ -8,6 +8,7 @@ import ru.nsk.java.tasktest.entity.Product;
 import ru.nsk.java.tasktest.service.ProductService;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
@@ -21,14 +22,17 @@ public class ProductController {
 
     @PostMapping("/id")
     public ResponseEntity<Product> findById(@RequestBody Long id) {
-        Product product = null;
+
+        Optional<Product> productOptional = productService.findById(id);
+
         try {
-            product = productService.findById(id);
+            if(productOptional.isPresent()){
+                return ResponseEntity.ok(productOptional.get());
+            }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        return ResponseEntity.ok(product);
+        return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("/update")

@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Date;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "purchase",schema = "task", catalog = "test_task")
 public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +20,11 @@ public class Purchase {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "id_product", nullable = false)
-    private Long idProduct;
-
-    @Column(name = "date _purchase")
+    @Column(name = "date_purchase")
     private Date datePurchase;
+    @ManyToOne
+    @JoinColumn(name = "id_product", referencedColumnName = "id")
+    private Product idProduct;
 
 
     @Override

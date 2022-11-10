@@ -5,6 +5,7 @@ import ru.nsk.java.tasktest.entity.Purchase;
 import ru.nsk.java.tasktest.repo.PurchaseRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,8 +17,8 @@ public class PurchaseService {
         this.productRepository = productRepository;
     }
 
-    public Purchase findById(Long id) {
-        return productRepository.findById(id).get();
+    public Optional<Purchase> findById(Long id) {
+        return productRepository.findById(id);
     }
 
     public Purchase add(Purchase purchase) {

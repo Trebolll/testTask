@@ -9,6 +9,7 @@ import ru.nsk.java.tasktest.service.PurchaseService;
 
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/purchase")
@@ -22,14 +23,16 @@ public class PurchaseController {
 
     @PostMapping("/id")
     public ResponseEntity<Purchase> findById(@RequestBody Long id) {
-        Purchase purchase = null;
+        Optional<Purchase> purchaseOptional = purchaseService.findById(id);
         try {
-            purchase = purchaseService.findById(id);
+           if(purchaseOptional.isPresent()){
+               return ResponseEntity.ok(purchaseOptional.get());
+           }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+
         }
-        return ResponseEntity.ok(purchase);
+        return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("/update")

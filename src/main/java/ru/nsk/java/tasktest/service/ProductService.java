@@ -1,11 +1,11 @@
 package ru.nsk.java.tasktest.service;
 
 import org.springframework.stereotype.Service;
-import ru.nsk.java.tasktest.entity.Buyer;
 import ru.nsk.java.tasktest.entity.Product;
 import ru.nsk.java.tasktest.repo.ProductRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,8 +17,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product findById(Long id) {
-        return productRepository.findById(id).get();
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
     }
 
     public Product add(Product product) {

@@ -9,6 +9,7 @@ import ru.nsk.java.tasktest.service.BuyerService;
 
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/buyer")
@@ -22,14 +23,17 @@ public class BuyerController {
 
     @PostMapping("/id")
     public ResponseEntity<Buyer> findById(@RequestBody Long id) {
-        Buyer buyer = null;
+
+        Optional<Buyer> buyerOptional = buyerService.findById(id);
+
         try {
-            buyer = buyerService.findById(id);
+           if(buyerOptional.isPresent()){// если объект найден
+               return ResponseEntity.ok(buyerOptional.get());//получаем User из контейнера и возвращаем в теле ответа
+            }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        return ResponseEntity.ok(buyer);
+       return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("/update")

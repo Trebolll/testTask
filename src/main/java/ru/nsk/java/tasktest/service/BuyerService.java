@@ -5,6 +5,7 @@ import ru.nsk.java.tasktest.entity.Buyer;
 import ru.nsk.java.tasktest.repo.BuyerRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,8 +17,8 @@ public class BuyerService {
         this.buyerRepository = buyerRepository;
     }
 
-    public Buyer findById(Long id) {
-        return buyerRepository.findById(id).get();
+    public Optional<Buyer> findById(Long id) {
+        return buyerRepository.findById(id);
     }
     public Buyer add(Buyer buyer)  {
         return buyerRepository.save(buyer);

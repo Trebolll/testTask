@@ -1,30 +1,37 @@
 package ru.nsk.java.tasktest.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "buyer",schema = "task", catalog = "test_task")
 public class Buyer {
 
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
 
-    @Basic
-    @Column(name = "id_purchases", nullable = true)
-    private Long idPurchases;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_purchase", referencedColumnName = "id")
+    private Purchase idPurchases;
+
 
     @Override
     public boolean equals(Object o) {

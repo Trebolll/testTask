@@ -8,21 +8,22 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "product",schema = "task", catalog = "test_task")
 public class Product {
-    private String name;
-    @Column(name = "cost", nullable = false)
-    private Long cost;
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-
+    @Basic
+    @Column(name = "name", nullable = false, length = -1)
+    private String name;
+    @Basic
+    @Column(name = "cost", nullable = false)
+    private Long cost;
 
     @Override
     public boolean equals(Object o) {
