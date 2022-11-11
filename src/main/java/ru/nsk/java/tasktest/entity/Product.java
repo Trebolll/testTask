@@ -18,11 +18,9 @@ public class Product {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "name", nullable = false, length = -1)
+
     private String name;
-    @Basic
-    @Column(name = "cost", nullable = false)
+
     private Long cost;
 
     @Override
