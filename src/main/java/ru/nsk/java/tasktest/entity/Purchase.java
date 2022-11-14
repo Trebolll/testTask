@@ -22,31 +22,15 @@ public class Purchase {
 
     @Column(name = "date_purchase")
     private Date datePurchase;
+
     @ManyToOne
     @JoinColumn(name = "id_product", referencedColumnName = "id")
-    private Product idProduct;
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "id_buyer",referencedColumnName = "id")//?
+    private Purchase buyer;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Purchase purchase = (Purchase) o;
-
-        if (id != null ? !id.equals(purchase.id) : purchase.id != null) return false;
-        if (idProduct != null ? !idProduct.equals(purchase.idProduct) : purchase.idProduct != null) return false;
-        if (datePurchase != null ? !datePurchase.equals(purchase.datePurchase) : purchase.datePurchase != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (idProduct != null ? idProduct.hashCode() : 0);
-        result = 31 * result + (datePurchase != null ? datePurchase.hashCode() : 0);
-        return result;
-    }
 }

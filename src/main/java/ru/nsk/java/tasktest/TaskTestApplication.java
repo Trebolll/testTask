@@ -1,6 +1,8 @@
 package ru.nsk.java.tasktest;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,7 +19,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
 
+
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Scanner;
 
@@ -27,23 +32,23 @@ public class TaskTestApplication implements CommandLineRunner {
     private static final Logger LOG = LoggerFactory
             .getLogger(TaskTestApplication.class);
 
-    Path file;
 
-    {
-        try {
-            file = ResourceUtils.getFile("src/main/resources/data.json").toPath();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(file);
-
-    }
+//    Path file;
+//
+//    {
+//        try {
+//            file = ResourceUtils.getFile("src/main/resources/data.json").toPath();
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println(file);
+//
+//    }
 
 
     public static void main(String[] args) {
         LOG.info("STARTING THE APPLICATION");
         SpringApplication.run(TaskTestApplication.class, args);
-
         LOG.info("APPLICATION FINISHED");
     }
 

@@ -1,5 +1,6 @@
 package ru.nsk.java.tasktest.controller;
 
+import lombok.Getter;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import ru.nsk.java.tasktest.entity.Buyer;
 import ru.nsk.java.tasktest.service.BuyerService;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -89,7 +92,29 @@ public class BuyerController {
         }
 
         return ResponseEntity.ok(buyerService.add(buyer));
-
+    }
+    @GetMapping("/findBuyerByProduct")
+    public ResponseEntity<List<Buyer>> findBuyerByProduct(){
+        return ResponseEntity.ok(buyerService.findBuyerByProduct(1, "Минеральная вода"));
     }
 
+    @GetMapping("/findNyName")
+    public ResponseEntity<List<Buyer>> findByName(){
+        return ResponseEntity.ok(buyerService.findByName("Иванов"));
+    }
+
+    @GetMapping("/findBuyerByProduct")
+    public ResponseEntity<List<Buyer>> findBuyerByProduct(int minPurchases, String name){
+        return ResponseEntity.ok(buyerService.findBuyerByProduct(minPurchases, name));
+    }
+
+    @GetMapping("/findMinMax")
+    public ResponseEntity<List<Buyer>> findMaxMin(int min, int max){
+        return ResponseEntity.ok(buyerService.findMinMax(min, max));
+    }
+
+    @GetMapping("/findBad")
+    public ResponseEntity<List<Buyer>> findBad(){
+        return ResponseEntity.ok(buyerService.findBad(2));
+    }
 }
