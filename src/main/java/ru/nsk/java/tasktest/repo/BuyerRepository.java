@@ -1,5 +1,6 @@
 package ru.nsk.java.tasktest.repo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.sql.Select;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.nsk.java.tasktest.entity.Buyer;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -42,4 +44,24 @@ public interface BuyerRepository extends JpaRepository<Buyer, Long> {
             " group by b order by pu.size desc")
     Page<Buyer> findBad(Pageable pageable);
 
+    @Query(value = "select concat(b.last_name, ' ', b.first_name) as buyerName, pr.name as productName, sum(pr.cost) as expenses from task.buyer b " +
+            " inner join " +
+            "        task.purchase pu " +
+            "            on b.id=pu.id_buyer " +
+            "inner join " +
+            "task.product pr " +
+            "on pr.id = pu.id_product " +
+            "where date(pu.date_purchase) between :date1 and :date2 " +
+            "group by b.id, pr.name", nativeQuery = true)
+    List<BuyerStat> buyersByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+    interface BuyerStat{
+        @JsonIgnore
+        String getBuyerName();
+
+        String getProductName();
+
+        Long getExpenses();
+
+    }
 }

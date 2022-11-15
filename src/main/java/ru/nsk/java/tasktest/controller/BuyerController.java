@@ -6,13 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.nsk.java.tasktest.entity.Buyer;
+import ru.nsk.java.tasktest.repo.BuyerRepository;
 import ru.nsk.java.tasktest.service.BuyerService;
 
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/buyer")
@@ -30,8 +29,8 @@ public class BuyerController {
         Optional<Buyer> buyerOptional = buyerService.findById(id);
 
         try {
-           if(buyerOptional.isPresent()){// если объект найден
-               return ResponseEntity.ok(buyerOptional.get());//получаем User из контейнера и возвращаем в теле ответа
+           if(buyerOptional.isPresent()){
+               return ResponseEntity.ok(buyerOptional.get());
             }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -42,12 +41,10 @@ public class BuyerController {
     @PutMapping("/update")
     public ResponseEntity<Buyer> update(@RequestBody Buyer buyer) {
 
-        // проверка на обязательные параметры
         if (buyer.getId() == null || buyer.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        // если передали пустое значение title
         if (buyer.getFirstName() == null || buyer.getFirstName().trim().length() == 0) {
             return new ResponseEntity("missed param: first name", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -56,7 +53,7 @@ public class BuyerController {
             return new ResponseEntity("missed param: last name", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        // save работает как на добавление, так и на обновление
+
         buyerService.update(buyer);
 
         return new ResponseEntity(HttpStatus.OK);
@@ -70,19 +67,19 @@ public class BuyerController {
             e.printStackTrace();
             return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/add")
     public ResponseEntity<Buyer> add(@RequestBody Buyer buyer) {
 
-        // проверка на обязательные параметры
+
         if (buyer.getId() != null && buyer.getId() != 0) {
-            // id создается автоматически в БД (autoincrement), поэтому его передавать не нужно, иначе может быть конфликт уникальности значения
+
             return new ResponseEntity("redundant param: id must be null", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        // если передали пустое значение title
+
         if (buyer.getFirstName() == null || buyer.getFirstName().trim().length() == 0) {
             return new ResponseEntity("missed param: first name", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -96,29 +93,20 @@ public class BuyerController {
 
     ///---------------------------------------------------------------------------------------------//
 
-//    @GetMapping("/findBuyerByProduct")
-//    public ResponseEntity<List<Buyer>> findBuyerByProduct(){
-//        return ResponseEntity.ok(buyerService.findBuyerByProduct(4L, "Кефир"));
-//    }
+    @GetMapping("/findBuyerByProduct")
+    public ResponseEntity<List<Buyer>> findBuyerByProduct(){
+        return ResponseEntity.ok(buyerService.findBuyerByProduct(4L, "Кефир"));
+    }
 
     @GetMapping("/findByLastName")
-    public ResponseEntity<List<Buyer>> findByLastName(String lastName){
-        return ResponseEntity.ok(buyerService.findByLastName(lastName));
+    public ResponseEntity<List<Buyer>> findByLastName(){
+        return ResponseEntity.ok(buyerService.findByLastName("Давыдов"));
     }
 
-    @GetMapping("/findBuyerByProduct")
-    public ResponseEntity<List<Buyer>> findBuyerByProduct(Long minPurchase, String productName){
-        return ResponseEntity.ok(buyerService.findBuyerByProduct(minPurchase, productName));
-    }
-
-//    @GetMapping("/findMinMax")
-//    public ResponseEntity<List<Buyer>> findMaxMin(){
-//        return ResponseEntity.ok(buyerService.findMinMax(199L, 2001L));
-//    }
 
     @GetMapping("/findMinMax")
-    public ResponseEntity<List<Buyer>> findMaxMin(Long min,Long max){
-        return ResponseEntity.ok(buyerService.findMinMax(min, max));
+    public ResponseEntity<List<Buyer>> findMaxMin(){
+        return ResponseEntity.ok(buyerService.findMinMax(199L, 2001L));
     }
 
 
@@ -126,5 +114,14 @@ public class BuyerController {
     @GetMapping("/findBad")
     public ResponseEntity<List<Buyer>> findBad(){
         return ResponseEntity.ok(buyerService.findBad(1));
+    }
+
+    @GetMapping("/buyersByDate")
+    public ResponseEntity<Map<String, List<BuyerRepository.BuyerStat>>> buyersByDate() {
+        Calendar dateFrom = Calendar.getInstance();
+        dateFrom.add(Calendar.DAY_OF_MONTH, -15);
+
+        Date dateTo = new Date();
+        return ResponseEntity.ok(buyerService.buyersByDate(dateFrom.getTime(), dateTo));
     }
 }
