@@ -36,15 +36,15 @@ public class BuyerService {
 
 
 
-    public List<Buyer> findByName(String name) {
-        return buyerRepository.findByLastNameContainsIgnoreCase(name);
+    public List<Buyer> findByLastName(String lastName) {
+        return buyerRepository.findByLastName(lastName);
     }
 
-    public List<Buyer> findBuyerByProduct(long minPuchases, String productName) {
-        return buyerRepository.findBuyerByProduct(minPuchases, productName);
+    public List<Buyer> findBuyerByProduct(Long minPurchase, String productName) {
+        return buyerRepository.findBuyerByProduct(minPurchase, productName);
     }
 
-    public List<Buyer> findMinMax(int min, int max) {
+    public List<Buyer> findMinMax(Long min, Long max) {
         return buyerRepository.findMinMax(min, max);
     }
 

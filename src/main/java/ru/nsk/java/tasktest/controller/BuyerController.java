@@ -93,28 +93,38 @@ public class BuyerController {
 
         return ResponseEntity.ok(buyerService.add(buyer));
     }
-    @GetMapping("/findBuyerByProduct")
-    public ResponseEntity<List<Buyer>> findBuyerByProduct(){
-        return ResponseEntity.ok(buyerService.findBuyerByProduct(1, "Минеральная вода"));
+
+    ///---------------------------------------------------------------------------------------------//
+
+//    @GetMapping("/findBuyerByProduct")
+//    public ResponseEntity<List<Buyer>> findBuyerByProduct(){
+//        return ResponseEntity.ok(buyerService.findBuyerByProduct(4L, "Кефир"));
+//    }
+
+    @GetMapping("/findByLastName")
+    public ResponseEntity<List<Buyer>> findByLastName(String lastName){
+        return ResponseEntity.ok(buyerService.findByLastName(lastName));
     }
 
-    @GetMapping("/findNyName")
-    public ResponseEntity<List<Buyer>> findByName(){
-        return ResponseEntity.ok(buyerService.findByName("Иванов"));
+    @GetMapping("/findBuyerByProduct")
+    public ResponseEntity<List<Buyer>> findBuyerByProduct(Long minPurchase, String productName){
+        return ResponseEntity.ok(buyerService.findBuyerByProduct(minPurchase, productName));
     }
 
-    @GetMapping("/findBuyerByProduct")
-    public ResponseEntity<List<Buyer>> findBuyerByProduct(int minPurchases, String name){
-        return ResponseEntity.ok(buyerService.findBuyerByProduct(minPurchases, name));
-    }
+//    @GetMapping("/findMinMax")
+//    public ResponseEntity<List<Buyer>> findMaxMin(){
+//        return ResponseEntity.ok(buyerService.findMinMax(199L, 2001L));
+//    }
 
     @GetMapping("/findMinMax")
-    public ResponseEntity<List<Buyer>> findMaxMin(int min, int max){
+    public ResponseEntity<List<Buyer>> findMaxMin(Long min,Long max){
         return ResponseEntity.ok(buyerService.findMinMax(min, max));
     }
 
+
+
     @GetMapping("/findBad")
     public ResponseEntity<List<Buyer>> findBad(){
-        return ResponseEntity.ok(buyerService.findBad(2));
+        return ResponseEntity.ok(buyerService.findBad(1));
     }
 }

@@ -32,7 +32,7 @@ public class Buyer {
 
     @OneToMany(mappedBy= "buyer")
     @JsonIgnore
-    private Set<Purchase> purchases = new HashSet<>();
+    private Set<Purchase> purchase = new HashSet<>();
 
 
 

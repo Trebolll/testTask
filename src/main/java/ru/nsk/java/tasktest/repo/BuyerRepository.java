@@ -1,5 +1,6 @@
 package ru.nsk.java.tasktest.repo;
 
+import org.hibernate.sql.Select;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,30 +12,33 @@ import ru.nsk.java.tasktest.entity.Buyer;
 import java.util.List;
 
 @Repository
-public interface BuyerRepository extends JpaRepository<Buyer,Long> {
+public interface BuyerRepository extends JpaRepository<Buyer, Long> {
 
-    List<Buyer> findByLastNameContainsIgnoreCase(String lastName);
+
+    @Query("select b FROM Buyer b where b.lastName=:lastName")
+    List<Buyer> findByLastName(@Param("lastName") String lastName);
 
 
     @Query("select b from Buyer b " +
-            "inner join b.purchases pu " +
+            "inner join b.purchase pu " +
             "where pu.product.name=:productName " +
             "group by b " +
-            "having count(b)>:minPurchases"
+            "having count(b)>=:minPurchase"
     )
-    List<Buyer> findBuyerByProduct(@Param("minPurchases") Long minPurchases,
+    List<Buyer> findBuyerByProduct(@Param("minPurchase") Long minPurchase,
                                    @Param("productName") String productName
     );
 
-    @Query("select b from Buyer b " +
-            "inner join b.purchases pu  " +
-            " group by b " +
-            "having max(pu.product.cost)<:max and min(pu.product.cost)>:min "
+    @Query(value = "with sums as (" +
+            "select b.*, sum(pr.cost) as summa from task.buyer b " +
+            "inner join task.purchase pu on b.id=pu.id_buyer " +
+            "inner join task.product pr on pr.id = pu.id_product group by b.id ) " +
+            "select id, first_name, last_name from sums where summa<:max and summa>:min", nativeQuery = true
     )
-    List<Buyer> findMinMax(@Param("min") int min, @Param("max") int max);
+    List<Buyer> findMinMax(@Param("min") Long min, @Param("max") Long max);
 
     @Query("select b from Buyer b " +
-            "inner join b.purchases pu  " +
+            "inner join b.purchase pu  " +
             " group by b order by pu.size desc")
     Page<Buyer> findBad(Pageable pageable);
 

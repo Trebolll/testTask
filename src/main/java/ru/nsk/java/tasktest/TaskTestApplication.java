@@ -27,38 +27,14 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 @SpringBootApplication
-public class TaskTestApplication implements CommandLineRunner {
-
-    private static final Logger LOG = LoggerFactory
-            .getLogger(TaskTestApplication.class);
-
-
-//    Path file;
-//
-//    {
-//        try {
-//            file = ResourceUtils.getFile("src/main/resources/data.json").toPath();
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println(file);
-//
-//    }
-
+public class TaskTestApplication  {
 
     public static void main(String[] args) {
-        LOG.info("STARTING THE APPLICATION");
+
         SpringApplication.run(TaskTestApplication.class, args);
-        LOG.info("APPLICATION FINISHED");
+
     }
 
-    @Override
-    public void run(String... args) {
-        LOG.info("EXECUTING : command line runner");
 
-        for (int i = 0; i < args.length; ++i) {
-            LOG.info("args[{}]: {}", i, args[i]);
-        }
-    }
 }
 

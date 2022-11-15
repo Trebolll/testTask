@@ -1,22 +1,11 @@
-"criterias": [
-
-"lastNames": [ {"lastName": "Иванов"},
-{"lastName": "Иванов"}, ],
-{"productName": "Минеральная вода", "minTimes": 5},
-{"minExpenses": 112, "maxExpenses": 4000},
-{"badCustomers": 3}
-]
+{
+  "criterias": [
+    {"lastName": "Иванов"},
+    {"productName": "Минеральная вода", "minTimes": 5},
+    {"minExpenses": 112, "maxExpenses": 4000},
+    {"badCustomers": 3}
+  ]
 }
 
-
-либо так может быть {
-"criterias": [
-{"lastName": "Иванов"},
-{"lastName": "Иванов"},
-{"productName": "Минеральная вода", "minTimes": 5},
-{"minExpenses": 112, "maxExpenses": 4000},
-{"badCustomers": 3}
-]
-}
 
 
