@@ -1,14 +1,17 @@
 package ru.nsk.java.tasktest.service;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.nsk.java.tasktest.entity.Buyer;
+import ru.nsk.java.tasktest.json.Customer;
+import ru.nsk.java.tasktest.json.PurchaseJson;
+import ru.nsk.java.tasktest.json.Stat;
 import ru.nsk.java.tasktest.repo.BuyerRepository;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -37,15 +40,15 @@ public class BuyerService {
     }
 
 
-    public List<Buyer> findByLastName(String lastName) {
-        return buyerRepository.findByLastName(lastName);
+    public List<Buyer> findByName(String name) {
+        return buyerRepository.findByLastNameContainsIgnoreCase(name);
     }
 
-    public List<Buyer> findBuyerByProduct(Long minPurchase, String productName) {
-        return buyerRepository.findBuyerByProduct(minPurchase, productName);
+    public List<Buyer> findBuyerByProduct(String productName, long minPuchases) {
+        return buyerRepository.findBuyerByProduct(productName, minPuchases);
     }
 
-    public List<Buyer> findMinMax(Long min, Long max) {
+    public List<Buyer> findMinMax(long min, long max) {
         return buyerRepository.findMinMax(min, max);
     }
 
@@ -58,16 +61,19 @@ public class BuyerService {
         return buyerRepository.findBad(pageRequest).getContent();
     }
 
-    public Map<String, List<BuyerRepository.BuyerStat>> buyersByDate(Date dateFrom, Date dateTo) {
+    public Stat buyersByDate(Date dateFrom, Date dateTo) {
 
-        List<BuyerRepository.BuyerStat> listStat = buyerRepository.buyersByDate(dateFrom, dateTo);
+
+        List<BuyerRepository.BuyerStat> listBuyers = buyerRepository.buyersByDate(dateFrom, dateTo);
 
         Map<String, List<BuyerRepository.BuyerStat>> map = new HashMap<>();
 
-        for (BuyerRepository.BuyerStat buyerStat : listStat) {
+        for (BuyerRepository.BuyerStat buyerStat : listBuyers) {
+
             List list;
 
             if (!map.containsKey(buyerStat.getBuyerName())) {
+
                 list = new ArrayList();
 
             } else {
@@ -75,11 +81,52 @@ public class BuyerService {
             }
 
             list.add(buyerStat);
+
             map.put(buyerStat.getBuyerName(), list);
 
         }
 
-        return map;
+        Stat stat = new Stat();
+        List<Customer> customers = new ArrayList<>();
+        stat.setCustomers(customers);
+
+
+        long diffDates = Math.abs(dateFrom.getTime() - dateTo.getTime());
+        long diffDays = TimeUnit.DAYS.convert(diffDates, TimeUnit.MILLISECONDS);
+        stat.setTotalDays(diffDays);
+
+        long totalExpensesAll = 0;
+
+
+        for (Map.Entry<String, List<BuyerRepository.BuyerStat>> entry : map.entrySet()) {
+            Customer customer = new Customer();
+            customer.setName(entry.getKey());
+
+            customers.add(customer);
+
+            List<PurchaseJson> purchaseJsons = new ArrayList<>();
+
+            long totalExpenses = 0;
+            for (BuyerRepository.BuyerStat buyerStat : entry.getValue()) {
+                PurchaseJson purchaseJson = new PurchaseJson();
+                purchaseJson.setName(buyerStat.getProductName());
+                purchaseJson.setExpenses(buyerStat.getExpenses());
+                totalExpenses += buyerStat.getExpenses();
+                purchaseJsons.add(purchaseJson);
+            }
+
+            customer.setTotalExpenses(totalExpenses);
+            totalExpensesAll += totalExpenses;
+            customer.setPurchases(purchaseJsons);
+        }
+
+        stat.setTotalExpenses(totalExpensesAll);
+
+        double avgExpenses = (double)totalExpensesAll / customers.size();
+
+        stat.setAvgExpenses(avgExpenses);
+
+        return stat;
 
     }
 }
