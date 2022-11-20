@@ -1,15 +1,19 @@
 package ru.nsk.java.tasktest.controller;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.nsk.java.tasktest.entity.Buyer;
-
 import ru.nsk.java.tasktest.json.BuyerResult;
 import ru.nsk.java.tasktest.json.SearchResult;
 import ru.nsk.java.tasktest.json.Stat;
 import ru.nsk.java.tasktest.service.BuyerService;
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -18,8 +22,11 @@ public class BuyerController {
 
     private final BuyerService buyerService;
 
+
+
     public BuyerController(BuyerService buyerService) {
         this.buyerService = buyerService;
+
     }
 
 //    @PostMapping("/id")
@@ -92,11 +99,10 @@ public class BuyerController {
 //        return ResponseEntity.ok(buyerService.add(buyer));
 //
 //    }
-
-    @GetMapping("/findBuyerByProduct")
-    public ResponseEntity<List<Buyer>> findBuyerByProduct() {
-        return ResponseEntity.ok(buyerService.findBuyerByProduct("Минеральная вода",1));
-    }
+@GetMapping("/findBuyerByProduct")
+public ResponseEntity<List<Buyer>> findBuyerByProduct() {
+    return ResponseEntity.ok(buyerService.findBuyerByProduct("Минеральная вода",1));
+}
 
     @GetMapping("/findNyName")
     public ResponseEntity<List<Buyer>> findByName() {
@@ -124,9 +130,11 @@ public class BuyerController {
     }
 
     @PostMapping("/manyjson")
-    public ResponseEntity<SearchResult>manyjson(@RequestBody Object object) {
+    public ResponseEntity<SearchResult> manyjson(@RequestBody Object object) {
 
         SearchResult searchResult = new SearchResult();
+        ObjectMapper mapper = new ObjectMapper();
+
 
         LinkedHashMap<String, List<Object>> map = (LinkedHashMap<String, List<Object>>) object;
 
@@ -142,22 +150,28 @@ public class BuyerController {
 
             criteriaResult.setCriteria(criteria);
 
+
             if (mapInner.containsKey("lastName")) {
                 criteriaResult.setResults(buyerService.findByName(mapInner.get("lastName").toString()));
+
             }
             else
             if (mapInner.containsKey("productName")) {
                 criteriaResult.setResults(buyerService.findBuyerByProduct(
                         mapInner.get("productName").toString(),
                         new Long(mapInner.get("minTimes").toString())
+
                 ));
+
             }
             else
             if (mapInner.containsKey("minExpenses")) {
                 criteriaResult.setResults(buyerService.findMinMax(
                         new Long(mapInner.get("minExpenses").toString()),
+
                         new Long(mapInner.get("maxExpenses").toString())
                 ));
+
             }
 
             else
@@ -165,13 +179,15 @@ public class BuyerController {
                 criteriaResult.setResults(buyerService.findBad(
                         new Integer(mapInner.get("badCustomers").toString())
                 ));
+             ;
             }
-
             searchResult.getResults().add(criteriaResult);
-
-
         }
-
+        try {
+            mapper.writeValue(new File("D:\\Backend\\testTask\\src\\main\\resources\\output.json"),searchResult);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(searchResult);
     }
 

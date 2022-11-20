@@ -1,5 +1,7 @@
 package ru.nsk.java.tasktest.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ import ru.nsk.java.tasktest.json.Stat;
 import ru.nsk.java.tasktest.repo.BuyerRepository;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,16 +67,11 @@ public class BuyerService {
     }
 
     public Stat buyersByDate(Date dateFrom, Date dateTo) {
-
-
+        ObjectMapper mapper = new ObjectMapper();
         List<BuyerRepository.BuyerStat> listBuyers = buyerRepository.buyersByDate(dateFrom, dateTo);
-
         Map<String, List<BuyerRepository.BuyerStat>> map = new HashMap<>();
-
         for (BuyerRepository.BuyerStat buyerStat : listBuyers) {
-
             List list;
-
             if (!map.containsKey(buyerStat.getBuyerName())) {
 
                 list = new ArrayList();
@@ -118,6 +118,7 @@ public class BuyerService {
             customer.setTotalExpenses(totalExpenses);
             totalExpensesAll += totalExpenses;
             customer.setPurchases(purchaseJsons);
+
         }
 
         stat.setTotalExpenses(totalExpensesAll);
@@ -125,6 +126,13 @@ public class BuyerService {
         double avgExpenses = (double)totalExpensesAll / customers.size();
 
         stat.setAvgExpenses(avgExpenses);
+
+
+        try {
+            mapper.writeValue(new File("D:\\Backend\\testTask\\src\\main\\resources\\output.json"),stat);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return stat;
 

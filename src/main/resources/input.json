@@ -1,0 +1,10 @@
+{
+  "criterias": [
+    {"lastName": "Денис"},
+    {"lastName": "Давыдов"},
+    {"productName": "Кефир", "minTimes": 2},
+    {"minExpenses": 1, "maxExpenses": 4000},
+    {"minExpenses":5, "maxExpenses": 20},
+    {"badCustomers": 2}
+  ]
+}

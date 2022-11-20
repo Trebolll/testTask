@@ -14,10 +14,7 @@ import java.util.List;
 
 @Repository
 public interface BuyerRepository extends JpaRepository<Buyer, Long> {
-
-
     List<Buyer> findByLastNameContainsIgnoreCase(String lastName);
-
 
     @Query("select b from Buyer b " +
             "inner join b.purchase pu  " +

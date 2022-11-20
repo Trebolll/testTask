@@ -10,6 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseJson {
+
     private String name;
+
     private Long expenses;
+
 }

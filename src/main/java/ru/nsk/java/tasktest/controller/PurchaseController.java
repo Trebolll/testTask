@@ -38,12 +38,11 @@ public class PurchaseController {
     @PutMapping("/update")
     public ResponseEntity<Purchase> update(@RequestBody Purchase purchase) {
 
-        // проверка на обязательные параметры
+
         if (purchase.getId() == null || purchase.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        // save работает как на добавление, так и на обновление
         purchaseService.update(purchase);
 
         return new ResponseEntity(HttpStatus.OK);
@@ -57,15 +56,12 @@ public class PurchaseController {
             e.printStackTrace();
             return new ResponseEntity("id= " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
-    }
+        return new ResponseEntity(HttpStatus.OK); }
 
     @PostMapping("/add")
     public ResponseEntity<Purchase> add(@RequestBody Purchase purchase) {
 
-        // проверка на обязательные параметры
         if (purchase.getId() != null && purchase.getId() != 0) {
-            // id создается автоматически в БД (autoincrement), поэтому его передавать не нужно, иначе может быть конфликт уникальности значения
             return new ResponseEntity("redundant param: id must be null", HttpStatus.NOT_ACCEPTABLE);
         }
         return ResponseEntity.ok(purchaseService.add(purchase));

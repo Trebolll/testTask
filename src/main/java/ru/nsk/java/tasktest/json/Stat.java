@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Stat {
 
-    private String type="stat";
+    private String type = "stat";
     private Long totalDays;
 
     private List<Customer> customers;
