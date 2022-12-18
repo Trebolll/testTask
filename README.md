@@ -6,7 +6,7 @@
 - PostgreSQL
 #### Контактные данные разработчика
 - m-or-ev@yandex.ru
-- 
+- 89538614597 - Марк
 #### Команда запуска search
 ```
 java -jar taskTest.jar search input_search.json output.json -- поиск по кретериям
