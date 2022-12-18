@@ -6,9 +6,9 @@
 - PostgreSQL
 #### Контактные данные разработчика
 - m-or-ev@yandex.ru
-#### Команды для сборки
+#### Команды запуска
+java -jar program.jar search input.json output.json
 ```
-mvn clean install
 ```
 #### Инструмент тестирования
 -Postman

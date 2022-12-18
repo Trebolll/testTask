@@ -9,24 +9,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 
-@SpringBootApplication
-@EnableJpaRepositories(basePackages = {"ru.nsk.java.tasktest"})
-public class TaskTestApplication implements CommandLineRunner {
-
-    private static Logger LOG = LoggerFactory
-            .getLogger(TaskTestApplication.class);
+//@SpringBootApplication
+public class TaskTestApplication  {
 
     public static void main(String[] args) {
-        LOG.info("STARTING THE APPLICATION");
         SpringApplication.run(TaskTestApplication.class, args);
-        LOG.info("APPLICATION FINISHED");
+
     }
-    @Override
-    public void run(String... args) {
-        LOG.info("EXECUTING : command line runner");
-        for (int i = 0; i < args.length; ++i) {
-            LOG.info("args[{}]: {}", i, args[i]);
-        }
-    }
+
 }
 
