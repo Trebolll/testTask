@@ -23,14 +23,13 @@ public class Purchase {
     @Column(name = "date_purchase")
     private Date datePurchase;
 
+
     @ManyToOne
     @JoinColumn(name = "id_product", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "id_buyer",referencedColumnName = "id")//?
+    @JoinColumn(name = "id_buyer", referencedColumnName = "id")
     private Purchase buyer;
-
-
 
 }

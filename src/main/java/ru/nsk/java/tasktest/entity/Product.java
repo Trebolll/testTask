@@ -29,5 +29,6 @@ public class Product {
 
     @OneToMany(mappedBy= "product")
     @JsonIgnore
-    private Set<Purchase> purchase = new HashSet<>();
+    private Set<Purchase> purchases = new HashSet<>();
+
 }
