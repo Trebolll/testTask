@@ -9,9 +9,7 @@
 #### Команды запуска
 java -jar taskTest.jar search input_search.json output.json -- поиск по кретериям
 ```
-```
 java -jar taskTest.jar stat input_stat.json output.json - статистика по дате
-```
 ```
 #### Инструмент тестирования
 -Postman
