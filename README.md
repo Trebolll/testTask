@@ -17,8 +17,10 @@
 ![2fb5a528f1937c8225a7d8asasd408b61daa70158490a_727](https://user-images.githubusercontent.com/83946585/215471553-100c766a-fc41-4b63-9e1c-4b1c1f4b5ba5.jpg)
 
 #### Команда запуска stat
-```
-java -jar taskTest.jar stat input_stat.json output.json - статистика по дате
-```
+
+- java -jar taskTest.jar stat input_stat.json output.json - статистика по дате
+- Пример
+![1123](https://user-images.githubusercontent.com/83946585/215472990-33f9cb48-fbe3-4572-95fd-6d04e6d38c70.jpg)
+
 #### Инструмент тестирования
 -Postman
