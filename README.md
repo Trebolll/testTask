@@ -25,5 +25,5 @@
 ![1123](https://user-images.githubusercontent.com/83946585/215472990-33f9cb48-fbe3-4572-95fd-6d04e6d38c70.jpg)
 
 #### Инструмент тестирования
--Postman
--Коммадная строка
+- Postman
+- Комадная строка
