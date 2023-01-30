@@ -1,3 +1,5 @@
+####Техническое задание
+[ТЗ.docx](https://github.com/Trebolll/testTask/files/10535635/default.docx)
 
 #### Стек Технологий
 - Java SE 1.8
